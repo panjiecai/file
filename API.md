@@ -9,8 +9,7 @@ POST /PSing/login/signin
 参数
 
 ```
-userid: "3172052051113"
-username: "潘杰才"
+username: "3172052051113"
 password: "111111"
 
 ```
