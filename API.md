@@ -222,7 +222,7 @@ POST /PSing/major/charge/briefupdate
 参数
 
 ```
-"berieftext": "...."
+"brieftext": "...."
 ```
 
 返回
