@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 30/09/2020 14:38:53
+ Date: 09/10/2020 12:35:58
 */
 
 SET NAMES utf8mb4;
@@ -42,7 +42,7 @@ CREATE TABLE `hibernate_sequence`  (
 -- ----------------------------
 -- Records of hibernate_sequence
 -- ----------------------------
-INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (7);
 
 -- ----------------------------
 -- Table structure for major
@@ -76,6 +76,7 @@ CREATE TABLE `student`  (
   `email` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
   `gpa` int(1) NOT NULL COMMENT '绩点',
   PRIMARY KEY (`sno`) USING BTREE,
+  UNIQUE INDEX `idx_email`(`email`) USING BTREE,
   INDEX `idx_insititute`(`institute`) USING BTREE,
   INDEX `idx_majot`(`major`) USING BTREE,
   INDEX `idx_class`(`classname`) USING BTREE,
@@ -85,9 +86,10 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES ('111111', '潘杰才五五五五五五', '信息科学与工程学院', '软件工程', '1', '2020', '1597470774@qq.com', 3);
-INSERT INTO `student` VALUES ('222222', '曹磊', '信息学院', '软件工程', '1', '2020', '22', 1);
-INSERT INTO `student` VALUES ('333333', '岑展宇', '信息学院', '软件工程', '2', '2020', '33', 2);
+INSERT INTO `student` VALUES ('111111', '潘杰才', '信息科学与工程学院', '计算机类', '1', '2020', '1597470774@qq.com', 3);
+INSERT INTO `student` VALUES ('222222', '曹磊', '信息学院', '计算机类', '1', '2020', '22', 1);
+INSERT INTO `student` VALUES ('333333', '岑展宇', '信息学院', '计算机类', '2', '2020', '33', 2);
+INSERT INTO `student` VALUES ('444444', '夜临', '信息学院', '计算机类', '1', '2020', '11', 2);
 
 -- ----------------------------
 -- Table structure for user
@@ -106,6 +108,7 @@ CREATE TABLE `user`  (
 INSERT INTO `user` VALUES ('111111', '111111', 1);
 INSERT INTO `user` VALUES ('222222', '111111', 1);
 INSERT INTO `user` VALUES ('333333', '111111', 1);
+INSERT INTO `user` VALUES ('444444', '111111', 1);
 
 -- ----------------------------
 -- Table structure for wish
@@ -120,11 +123,26 @@ CREATE TABLE `wish`  (
   INDEX `idx_sno`(`sno`) USING BTREE,
   INDEX `idx_wish_major_id`(`wish_major`) USING BTREE,
   CONSTRAINT `wish_ibfk_1` FOREIGN KEY (`sno`) REFERENCES `student` (`sno`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '志愿表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '志愿表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of wish
 -- ----------------------------
+INSERT INTO `wish` VALUES (1, '111111', '软件工程', 1);
+INSERT INTO `wish` VALUES (2, '111111', '计算机应用与技术', 2);
+INSERT INTO `wish` VALUES (3, '111111', '网络工程', 3);
+INSERT INTO `wish` VALUES (4, '222222', '软件工程', 1);
+INSERT INTO `wish` VALUES (5, '222222', '计算机应用与技术', 2);
+INSERT INTO `wish` VALUES (6, '222222', '网络工程', 3);
+INSERT INTO `wish` VALUES (7, '333333', '软件工程', 1);
+INSERT INTO `wish` VALUES (8, '333333', '计算机应用与技术', 2);
+INSERT INTO `wish` VALUES (9, '333333', '网络工程', 3);
+
+-- ----------------------------
+-- View structure for student_wish
+-- ----------------------------
+DROP VIEW IF EXISTS `student_wish`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `student_wish` AS select `wish`.`wish_id` AS `wish_id`,`wish`.`sno` AS `sno`,`wish`.`wish_major` AS `wish_major`,`wish`.`wish_level` AS `wish_level`,`student`.`gpa` AS `gpa` from (`student` join `wish` on((`student`.`sno` = `wish`.`sno`)));
 
 -- ----------------------------
 -- Triggers structure for table admin
