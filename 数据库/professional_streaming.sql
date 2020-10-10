@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 10/10/2020 09:37:50
+ Date: 10/10/2020 11:17:57
 */
 
 SET NAMES utf8mb4;
@@ -77,7 +77,7 @@ CREATE TABLE `student`  (
   `email` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
   `gpa` double(2, 0) NOT NULL DEFAULT 0 COMMENT '绩点',
   PRIMARY KEY (`sno`) USING BTREE,
-  UNIQUE INDEX `idx_email`(`email`) USING BTREE,
+  INDEX `idx_email`(`email`) USING BTREE,
   INDEX `idx_insititute`(`institute`) USING BTREE,
   INDEX `idx_majot`(`major`) USING BTREE,
   INDEX `idx_class`(`classname`) USING BTREE,
@@ -92,6 +92,7 @@ INSERT INTO `student` VALUES ('222222', '曹磊', '信息学院', '计算机类'
 INSERT INTO `student` VALUES ('333333', '岑展宇', '信息学院', '计算机类', '2', '2020', '33', 2);
 INSERT INTO `student` VALUES ('444444', '夜临', '信息学院', '计算机类', '1', '2020', '', 2);
 INSERT INTO `student` VALUES ('555555', '嘟嘟', '信息学院', '计算机类', '3', '2020', NULL, 4);
+INSERT INTO `student` VALUES ('666666', '呵呵', '信息学院', '计算机类', '1', '2020', NULL, 3);
 
 -- ----------------------------
 -- Table structure for user
@@ -112,6 +113,7 @@ INSERT INTO `user` VALUES ('222222', '111111', 1);
 INSERT INTO `user` VALUES ('333333', '111111', 1);
 INSERT INTO `user` VALUES ('444444', '111111', 1);
 INSERT INTO `user` VALUES ('555555', '111111', 1);
+INSERT INTO `user` VALUES ('666666', '111111', 1);
 
 -- ----------------------------
 -- Table structure for wish
@@ -159,12 +161,56 @@ END
 delimiter ;
 
 -- ----------------------------
+-- Triggers structure for table admin
+-- ----------------------------
+DROP TRIGGER IF EXISTS `admin_delect_tigger`;
+delimiter ;;
+CREATE TRIGGER `admin_delect_tigger` AFTER DELETE ON `admin` FOR EACH ROW BEGIN
+DELETE FROM USER WHERE username = old.admin_id;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table major
+-- ----------------------------
+DROP TRIGGER IF EXISTS `major_insert_tigger`;
+delimiter ;;
+CREATE TRIGGER `major_insert_tigger` AFTER INSERT ON `major` FOR EACH ROW BEGIN
+INSERT INTO USER(username,password,type) values(new.major_id,'222222','2');
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table major
+-- ----------------------------
+DROP TRIGGER IF EXISTS `major_delect_tigger`;
+delimiter ;;
+CREATE TRIGGER `major_delect_tigger` AFTER DELETE ON `major` FOR EACH ROW BEGIN
+DELETE FROM USER WHERE username = old.major_id;
+END
+;;
+delimiter ;
+
+-- ----------------------------
 -- Triggers structure for table student
 -- ----------------------------
 DROP TRIGGER IF EXISTS `insert_tigger`;
 delimiter ;;
-CREATE TRIGGER `insert_tigger` BEFORE INSERT ON `student` FOR EACH ROW BEGIN
+CREATE TRIGGER `insert_tigger` AFTER INSERT ON `student` FOR EACH ROW BEGIN
 INSERT INTO USER(username,password,type) values(new.sno,'111111','1');
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table student
+-- ----------------------------
+DROP TRIGGER IF EXISTS `delect_tigger`;
+delimiter ;;
+CREATE TRIGGER `delect_tigger` AFTER DELETE ON `student` FOR EACH ROW BEGIN
+DELETE FROM USER WHERE username = old.sno;
 END
 ;;
 delimiter ;
