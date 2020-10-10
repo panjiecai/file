@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 09/10/2020 12:35:58
+ Date: 10/10/2020 09:33:05
 */
 
 SET NAMES utf8mb4;
@@ -50,10 +50,11 @@ INSERT INTO `hibernate_sequence` VALUES (7);
 DROP TABLE IF EXISTS `major`;
 CREATE TABLE `major`  (
   `major_id` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '账号',
-  `charge` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '专业负责人姓名',
-  `institute` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学院',
-  `major` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分流专业',
-  `major_categories` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '大类专业',
+  `charge` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '专业负责人姓名',
+  `institute` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '学院',
+  `major` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分流专业',
+  `major_categories` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '大类专业',
+  `students_number` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '招收人数',
   PRIMARY KEY (`major_id`) USING BTREE,
   INDEX `idx_major`(`major`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '专业负责人表' ROW_FORMAT = Dynamic;
@@ -67,14 +68,14 @@ CREATE TABLE `major`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student`  (
-  `sno` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学号',
-  `sname` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
-  `institute` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学院',
-  `major` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '专业',
-  `classname` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '班级',
-  `grade` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '年级',
-  `email` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
-  `gpa` int(1) NOT NULL COMMENT '绩点',
+  `sno` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '学号',
+  `sname` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '姓名',
+  `institute` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '学院',
+  `major` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '专业',
+  `classname` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '班级',
+  `grade` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '年级',
+  `email` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `gpa` double(2, 0) NOT NULL DEFAULT 0 COMMENT '绩点',
   PRIMARY KEY (`sno`) USING BTREE,
   UNIQUE INDEX `idx_email`(`email`) USING BTREE,
   INDEX `idx_insititute`(`institute`) USING BTREE,
@@ -86,10 +87,11 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES ('111111', '潘杰才', '信息科学与工程学院', '计算机类', '1', '2020', '1597470774@qq.com', 3);
+INSERT INTO `student` VALUES ('111111', '潘杰才', '信息学院', '计算机类', '1', '2020', '1597470774@qq.com', 3);
 INSERT INTO `student` VALUES ('222222', '曹磊', '信息学院', '计算机类', '1', '2020', '22', 1);
 INSERT INTO `student` VALUES ('333333', '岑展宇', '信息学院', '计算机类', '2', '2020', '33', 2);
-INSERT INTO `student` VALUES ('444444', '夜临', '信息学院', '计算机类', '1', '2020', '11', 2);
+INSERT INTO `student` VALUES ('444444', '夜临', '信息学院', '计算机类', '1', '2020', '', 2);
+INSERT INTO `student` VALUES ('555555', '嘟嘟', '信息学院', '计算机类', '3', '2020', NULL, 4);
 
 -- ----------------------------
 -- Table structure for user
@@ -109,6 +111,7 @@ INSERT INTO `user` VALUES ('111111', '111111', 1);
 INSERT INTO `user` VALUES ('222222', '111111', 1);
 INSERT INTO `user` VALUES ('333333', '111111', 1);
 INSERT INTO `user` VALUES ('444444', '111111', 1);
+INSERT INTO `user` VALUES ('555555', '111111', 1);
 
 -- ----------------------------
 -- Table structure for wish
